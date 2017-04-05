@@ -4,25 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class RandomWalker {
-
-    public enum StepType {Constant, Variable, Weighted};
-    public StepType stepType = StepType.Constant;
+public class RandomWalker : MonoBehaviour {
 
     public float stepSize = 0.1f;
     public float stepFrequency = 0.1f;
 
-    //public bool twoDimensional = false;
-
     float timeSinceLastStep = 0.0f;
 
+    [SerializeField] bool is2D = false;
+
     [HideInInspector] public Vector3 walkerPosition;
-
-
-    public RandomWalker(Vector3 _currentPosition)
-    {
-        walkerPosition = _currentPosition;
-    }
 
 
     public void Walk()
@@ -43,33 +34,13 @@ public class RandomWalker {
     }
 
 
-	Vector3 Step(Vector3 originalVector)
+	public virtual Vector3 Step(Vector3 input)
     {
-        Vector3 newVector = originalVector;
-
-        if (stepType == StepType.Constant)
+        if (is2D)
         {
-            newVector += new Vector3(
-                    stepSize * UnityEngine.Random.Range(-1, 2),
-                    stepSize * UnityEngine.Random.Range(-1, 2),
-                    stepSize * UnityEngine.Random.Range(-1, 2)
-                );
+            input.z = 0f;
         }
 
-        else if (stepType == StepType.Variable)
-        {
-            newVector += new Vector3(
-                    UnityEngine.Random.Range(-stepSize, stepSize),
-                    UnityEngine.Random.Range(-stepSize, stepSize),
-                    UnityEngine.Random.Range(-stepSize, stepSize)
-                );
-        }
-
-        return newVector;
+        return input;
     }
-
-    //Vector2 Step(Vector2 originalPosition)
-    //{
-    //    return new Vector2(Step(originalPosition).x, Step(originalPosition).y);
-    //}
 }

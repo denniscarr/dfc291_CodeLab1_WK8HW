@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof (RandomWalker))]
 public class Random3DMovement : MonoBehaviour {
 
-    [SerializeField] private RandomWalker randomWalker;
+    RandomWalker randomWalker;
 
     [SerializeField] bool applyToRigidbody;
 
     private void Start()
     {
+        randomWalker = GetComponent<RandomWalker>();
         randomWalker.walkerPosition = transform.parent.position;
     }
 
@@ -21,7 +23,8 @@ public class Random3DMovement : MonoBehaviour {
         // See if our walker has moved.
         if (randomWalker.walkerPosition != transform.parent.localPosition)
         {
-            transform.parent.localPosition = randomWalker.walkerPosition;
+            if (applyToRigidbody) GetComponent<Rigidbody>().MovePosition(randomWalker.walkerPosition);
+            else transform.parent.localPosition = randomWalker.walkerPosition;
         }
 	}
 }
